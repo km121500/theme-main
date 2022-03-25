@@ -1,0 +1,80 @@
+<div class="container">
+    <p class="text-success"><%= flash[:notice]%></p>
+    <%= link_to 'カレンダー',calendar_callback_path %>
+    <div class=""><h3 style="background-color:rgba(107,90,105,0.1);">投稿</h3></div>
+
+    <div class="row-md-12">
+        <%= form_with model:@list, url:lists_path,local:true do |f| %>
+        <div class="col-md-6 mb-3">
+            <div class="">
+                <label class="control-label">タイトル</label>
+                <%= f.text_field :name,class: "form-control mx-5 border-secondary"%>
+            </div>
+            <label for="body">説明</label>
+            <%= f.text_area :body, class: "form-control mx-5 border-secondary" %>
+        </div>
+        <div class="col-md-6">
+            <label class="mt-3 mb-4">ジャンル</label>
+               <%= f.select :genre_id, options_from_collection_for_select(Genre.all, :id, :name), class:"form-control" %>
+             <div class="mb-3" id="star">
+               <%= f.label :rate,'評価 :', class: "1" %>
+               <%= f.hidden_field :rate, id: :review_star %>
+             </div>
+             <script>
+             $('#star').raty({
+               size     : 36,
+               starOff:  '<%= asset_path('star-off.png') %>',
+               starOn : '<%= asset_path('star-on.png') %>',
+               starHalf: '<%= asset_path('star-half.png') %>',
+               scoreName: 'list[rate]',
+               half: true,
+             });
+             </script>
+             <%= f.submit '新規登録', class: "btn btn-success mt-3 w-25" %>
+        </div>
+      <% end %>
+    </div>
+    
+    
+    <div class="row mt-5">
+        
+        <div class="col-md-3">
+            <%= render 'layouts/genre_search', genres: @genres %>
+            <%= link_to ">>>>ジャンルを追加する", genres_path, class: "d-block mt-4" %>
+        </div>
+        
+        <div class="col-md-9">
+            <table class="table table-striped">
+              <tbody>
+                <% @lists.each do |list| %>
+                <tr>
+                　<td><%= link_to list_path(list.id) do %> <h4 class="font-weight-bold"><%= list.name %></h4><% end %></td>
+                  <td>
+                    <%= link_to list_path(list.id) do %>
+                    <div class="">
+                        <div id="star-rate-<%= list.id %>"></div>
+                        <script>
+                        $('#star-rate-<%= list.id %>').raty({
+                           size: 36,
+                           starOff:  '<%= asset_path('star-off.png') %>',
+                           starOn : '<%= asset_path('star-on.png') %>',
+                           starHalf: '<%= asset_path('star-half.png') %>',
+                           half: true,
+                           readOnly: true,
+                           score: <%= list.rate %>,
+                        });
+                        </script>
+                   </div>
+                   <% end %>
+                   </td>
+                  <td>
+                    <%= link_to "編集する", edit_list_path(list), class: "btn btn-sm btn-success ml-3" %>
+                    <%= link_to "削除する", list_path(list),method: :delete, class: "btn btn-sm btn-danger ml-3" %>
+                  </td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+        </div>
+    </div>
+</div>

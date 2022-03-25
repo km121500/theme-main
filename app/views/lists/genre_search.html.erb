@@ -1,0 +1,50 @@
+<div class = "container">
+  <div class = "row  pt-3">
+    <!--ジャンル検索欄-->
+    <div class="col-md-3">
+      <%= render 'layouts/genre_search', genres: @genres %>
+      <!--すべての一覧へのリンク-->
+      <%= link_to ">>>>Todo一覧へ", lists_path, class: "d-block mt-4" %>
+    </div>
+    <!--一覧-->
+    <div class = "col-md-9">
+      <h3 class = "m-2 py-2" style = 'background: linear-gradient(to right, #fff 0%, #ffd6ff 30%, #ffd6ff 70%, #fff 100%);  font-weight: 600; width: 100%;' >
+        <%= @genre_searched.name %>一覧<span class = "h5">（<%= "#{@all_items_searched.count}件" %>）</span>
+      </h3>
+      <!--いじる-->
+      <div>
+      <table class="table table-striped">
+        <tbody>
+        
+                <% if !(@items.blank?) %>
+                        <% @items.each do |item| %>
+                        <tr>
+                                <td><%= link_to list_path(item) do %><h4 class="font-weight-bold"><%= item.name %></h4><% end %></td>
+                                <td>
+                                  <%= link_to list_path(item.id) do %>
+                                  <div>
+                                  <div id="star-rate-<%= item.id %>"></div>
+                                  <script>
+                                   $('#star-rate-<%= item.id %>').raty({
+                                     size: 36,
+                                     starOff:  '<%= asset_path('star-off.png') %>',
+                                     starOn : '<%= asset_path('star-on.png') %>',
+                                     starHalf: '<%= asset_path('star-half.png') %>',
+                                     half: true,
+                                     readOnly: true,
+                                     score: <%= item.rate %>,
+                                   });
+                                   </script>
+                                   </div>
+                                   <% end %>
+                            </td>
+                        </tr>
+                        <% end %>
+                <% end %>
+        </tbody>
+      </table>
+      </div>
+      <!--いじる-->
+    </div>
+  </div>
+</div>

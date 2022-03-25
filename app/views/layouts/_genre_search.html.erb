@@ -1,0 +1,14 @@
+<table class="table text-center">
+    <thead>
+      <tr class="table-warning">
+        <th>ジャンル</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% genres.each do |genre| %>
+      <tr>
+        <td><h5><%= link_to genre.name, genre_search_path(genre),class: 'font-weight-bold'%></h5></td>
+      </tr>
+      <% end %>
+    </tbody>
+</table>
